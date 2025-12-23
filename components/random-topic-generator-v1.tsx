@@ -8,15 +8,13 @@ export default function RandomTopicGenerator() {
   const [loading, setLoading] = useState(false);
   const [topics, setTopics] = useState<string[] | undefined>();
 
-  const handleResult = (input: string | undefined): string[] => {
-    if (!input) {
-      return [];
-    }
-    const output = [];
-    for (const a of input.split("|")) {
-      output.push(a.trim());
-    }
-    return output;
+  const handleResult = (input?: string): string[] => {
+    return input
+      ? input
+          .split("|")
+          .map((topic) => topic.trim())
+          .filter((topic) => topic.length > 0)
+      : [];
   };
   const handleClick = async () => {
     setLoading(true);
@@ -52,12 +50,13 @@ export default function RandomTopicGenerator() {
         {loading && <Loader />}
       </div>
 
-      {topics && (
+      {topics && topics.length > 0 && (
         <div className="flex flex-col">
           {topics.map((topic, index) => (
             <div
-            className="h-24 flex items-center border-b-2 border-[#1c1c1c] pl-4"
-            key={index}>
+              className="h-24 flex items-center border-b-2 border-[#1c1c1c] pl-4"
+              key={index}
+            >
               <p>{topic}</p>
             </div>
           ))}
